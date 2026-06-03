@@ -99,22 +99,22 @@ HomeFood Startup is a web application that connects home-based cooks with custom
 ## Screenshots
 
 ### Homepage
-![Homepage](screenshots/Homepage.png)
+![Homepage](screenshorts/Homepage.png)
 
 ### Dashboard
-![Dashboard](screenshots/Dashboard.png)
+![Dashboard](screenshorts/Dashboard.png)
 
 ### Cook Dashboard
-![Cook Dashboard](screenshots/Cookdashboard.png)
+![Cook Dashboard](screenshorts/Cookdashboard.png)
 
 ### Membership Dashboard
-![Membership Dashboard](screenshots/Membershipdashboard.png)
+![Membership Dashboard](screenshorts/Membershipdashboard.png)
 
 ### Donation Dashboard
-![Donation Dashboard](screenshots/Donatedashboard.png)
+![Donation Dashboard](screenshorts/Donatedashboard.png)
 
 ### Menu
-![Menu](screenshots/Menu.png)
+![Menu](screenshorts/Menu.png)
 
 ## Future Enhancements
 
