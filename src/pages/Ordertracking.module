@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600&display=swap');
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.app { font-family: 'DM Sans', sans-serif; background: #faf9f6; min-height: 100vh; }
+
+.nav { display:flex; align-items:center; justify-content:space-between; padding:0 32px; height:60px; background:#fff; border-bottom:1px solid #ece9e3; position:sticky; top:0; z-index:100; }
+.logo { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:#1a1a18; cursor:pointer; }
+.logo em { color:#D85A30; font-style:italic; }
+.navCenter { font-size:13px; color:#888; }
+.backLink { background:none; border:1px solid #ddd; padding:6px 14px; border-radius:99px; font-size:13px; cursor:pointer; color:#555; font-family:'DM Sans',sans-serif; }
+
+.hero { background:linear-gradient(135deg,#1a1a18,#2d2d2a); text-align:center; padding:44px 24px 36px; }
+.heroEyebrow { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:#F4A35A; font-weight:600; margin-bottom:12px; }
+.heroTitle { font-family:'Playfair Display',serif; font-size:clamp(26px,4vw,40px); font-weight:700; color:#fff; margin-bottom:20px; }
+.etaBox { display:inline-flex; flex-direction:column; align-items:center; background:rgba(216,90,48,0.2); border:1px solid rgba(216,90,48,0.4); border-radius:16px; padding:14px 28px; margin-bottom:16px; }
+.etaNum { font-size:40px; font-weight:800; color:#F4A35A; line-height:1; }
+.etaLbl { font-size:13px; color:rgba(255,255,255,0.6); margin-top:2px; }
+.heroCook { font-size:14px; color:rgba(255,255,255,0.6); }
+
+.layout { display:flex; gap:24px; max-width:1100px; margin:28px auto; padding:0 24px; align-items:flex-start; }
+.left { flex:1; display:flex; flex-direction:column; gap:20px; }
+.right { width:300px; flex-shrink:0; display:flex; flex-direction:column; gap:16px; }
+
+.section { background:#fff; border-radius:16px; padding:24px; border:1px solid #ece9e3; }
+.sectionTitle { font-family:'Playfair Display',serif; font-size:18px; font-weight:600; color:#1a1a18; margin-bottom:20px; }
+
+/* TRACKER */
+.tracker { display:flex; flex-direction:column; }
+.stepRow { display:flex; gap:16px; }
+.stepLeft { display:flex; flex-direction:column; align-items:center; }
+.stepDot { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; flex-shrink:0; transition:all 0.4s; }
+.dotDone { background:#D85A30; color:#fff; }
+.dotActive { background:#fff8f5; border:2px solid #D85A30; color:#D85A30; animation:pulse 1.5s infinite; }
+.dotPending { background:#f5f3f0; border:2px solid #e0ddd8; color:#bbb; }
+.stepLine { width:2px; flex:1; min-height:24px; background:#e0ddd8; margin:4px 0; transition:background 0.4s; }
+.lineDone { background:#D85A30; }
+.stepContent { padding-bottom:20px; flex:1; }
+.stepContentActive .stepLabel { color:#D85A30; }
+.stepLabel { font-size:14px; font-weight:700; color:#1a1a18; margin-bottom:3px; }
+.stepDesc { font-size:12px; color:#888; }
+.stepTime { font-size:11px; color:#D85A30; margin-top:4px; font-weight:600; }
+
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(216,90,48,0.3)} 50%{box-shadow:0 0 0 8px rgba(216,90,48,0)} }
+
+/* MAP */
+.mapPlaceholder { border-radius:12px; overflow:hidden; border:1px solid #e0ddd8; }
+.mapBg { position:relative; height:220px; background:linear-gradient(135deg,#e8f0e8,#d4e4d4); overflow:hidden; }
+.mapRoad1 { position:absolute; top:50%; left:0; right:0; height:12px; background:rgba(255,255,255,0.6); transform:translateY(-50%); }
+.mapRoad2 { position:absolute; top:0; bottom:0; left:40%; width:10px; background:rgba(255,255,255,0.5); }
+.mapRoad3 { position:absolute; top:30%; left:0; right:0; height:8px; background:rgba(255,255,255,0.3); transform:rotate(-8deg); }
+.mapPin { position:absolute; font-size:22px; }
+.cookPin { top:15%; left:15%; }
+.deliveryPin { top:42%; left:55%; animation:drive 6s linear infinite; }
+.homePin { bottom:15%; right:12%; }
+@keyframes drive { 0%{transform:translateX(0)} 50%{transform:translateX(30px)} 100%{transform:translateX(0)} }
+.mapLabel { position:absolute; font-size:10px; color:#555; background:rgba(255,255,255,0.8); padding:2px 6px; border-radius:4px; font-family:'DM Sans',sans-serif; }
+.mapNote { padding:10px 16px; font-size:11px; color:#aaa; text-align:center; background:#faf9f6; }
+
+/* SUMMARY */
+.summaryCard,.partnerCard,.rateCard,.helpCard { background:#fff; border:1px solid #ece9e3; border-radius:16px; padding:20px; }
+.sideTitle { font-family:'Playfair Display',serif; font-size:16px; font-weight:600; color:#1a1a18; margin-bottom:14px; }
+.itemRow { display:flex; justify-content:space-between; font-size:13px; color:#555; margin-bottom:8px; }
+.divider { border:none; border-top:1px dashed #e0ddd8; margin:10px 0; }
+.totalRow { display:flex; justify-content:space-between; font-size:16px; font-weight:700; color:#1a1a18; }
+.payMode { text-align:center; font-size:12px; color:#aaa; margin-top:10px; }
+
+.partnerRow { display:flex; align-items:center; gap:12px; }
+.partnerAvatar { width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,#1a1a18,#444); color:#fff; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.partnerInfo { flex:1; }
+.partnerName { font-size:14px; font-weight:700; color:#1a1a18; }
+.partnerRating { font-size:12px; color:#888; }
+.callBtn { padding:7px 14px; background:#e8f8f0; color:#1D9E75; border:none; border-radius:99px; font-size:12px; font-weight:600; cursor:pointer; text-decoration:none; }
+
+.rateStars { display:flex; justify-content:center; gap:6px; margin-bottom:16px; }
+.rateBtn { width:100%; background:#D85A30; color:#fff; border:none; padding:12px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
+
+.helpCard { display:flex; align-items:center; gap:12px; }
+.helpIcon { font-size:24px; }
+.helpTitle { font-size:14px; font-weight:700; color:#1a1a18; }
+.helpSub { font-size:12px; color:#888; }
+.helpBtn { margin-left:auto; background:#1a1a18; color:#fff; border:none; padding:8px 16px; border-radius:99px; font-size:12px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
+
+@media(max-width:768px) { .layout{flex-direction:column;} .right{width:100%;} }

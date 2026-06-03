@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600&display=swap');
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.app { font-family: 'DM Sans', sans-serif; background: #faf9f6; min-height: 100vh; }
+.nav { display:flex; align-items:center; justify-content:space-between; padding:0 32px; height:60px; background:#fff; border-bottom:1px solid #ece9e3; position:sticky; top:0; z-index:100; }
+.logo { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:#1a1a18; cursor:pointer; }
+.logo em { color:#D85A30; font-style:italic; }
+.navCenter { font-size:13px; color:#888; }
+.backLink { background:none; border:1px solid #ddd; padding:6px 14px; border-radius:99px; font-size:13px; cursor:pointer; color:#555; font-family:'DM Sans',sans-serif; }
+.profileHeader { background:linear-gradient(135deg,#1a1a18,#2d2d2a); padding:36px 32px; display:flex; align-items:center; gap:28px; flex-wrap:wrap; }
+.avatarBig { width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#D85A30,#F4A35A); color:#fff; font-size:24px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; border:3px solid rgba(255,255,255,0.2); }
+.profileInfo { flex:1; }
+.profileName { font-family:'Playfair Display',serif; font-size:24px; font-weight:700; color:#fff; margin-bottom:6px; }
+.profilePhone,.profileEmail { font-size:13px; color:rgba(255,255,255,0.6); margin-bottom:4px; }
+.editBtn { margin-top:10px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25); color:#fff; padding:7px 16px; border-radius:99px; font-size:12px; cursor:pointer; font-family:'DM Sans',sans-serif; }
+.editFields { display:flex; flex-direction:column; gap:8px; }
+.editField { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:8px; padding:9px 12px; color:#fff; font-size:13px; font-family:'DM Sans',sans-serif; outline:none; }
+.editBtns { display:flex; gap:8px; margin-top:4px; }
+.cancelEdit { padding:7px 14px; background:none; border:1px solid rgba(255,255,255,0.3); border-radius:8px; color:rgba(255,255,255,0.7); cursor:pointer; font-size:12px; font-family:'DM Sans',sans-serif; }
+.saveEdit { padding:7px 14px; background:#D85A30; border:none; border-radius:8px; color:#fff; cursor:pointer; font-size:12px; font-weight:600; font-family:'DM Sans',sans-serif; }
+.profileStats { display:flex; align-items:center; gap:20px; background:rgba(255,255,255,0.08); border-radius:14px; padding:16px 24px; }
+.pStat { display:flex; flex-direction:column; align-items:center; }
+.pStat span { font-size:20px; font-weight:800; color:#F4A35A; }
+.pStat small { font-size:11px; color:rgba(255,255,255,0.5); margin-top:2px; }
+.pDivider { width:1px; height:36px; background:rgba(255,255,255,0.15); }
+.tabsBar { display:flex; background:#fff; border-bottom:1px solid #ece9e3; padding:0 32px; gap:4px; overflow-x:auto; }
+.tab { padding:14px 20px; background:none; border:none; font-size:14px; font-weight:500; color:#888; cursor:pointer; font-family:'DM Sans',sans-serif; border-bottom:2px solid transparent; white-space:nowrap; transition:all 0.2s; }
+.tabActive { color:#D85A30; border-bottom-color:#D85A30; font-weight:600; }
+.content { max-width:900px; margin:28px auto; padding:0 24px; }
+.ordersList { display:flex; flex-direction:column; gap:14px; }
+.orderCard { background:#fff; border:1px solid #ece9e3; border-radius:14px; padding:20px; }
+.orderTop { display:flex; justify-content:space-between; margin-bottom:10px; }
+.orderId { font-size:14px; font-weight:700; color:#1a1a18; }
+.orderDate { font-size:12px; color:#888; margin-top:2px; }
+.orderStatus { font-size:12px; color:#1D9E75; font-weight:600; }
+.orderItems { font-size:13px; color:#555; margin-bottom:14px; border-top:1px solid #f5f3f0; padding-top:10px; }
+.orderFoot { display:flex; align-items:center; gap:16px; }
+.orderTotal { font-size:16px; font-weight:700; color:#1a1a18; }
+.orderRating { font-size:14px; color:#F4A35A; letter-spacing:1px; flex:1; }
+.reorderBtn { background:#D85A30; color:#fff; border:none; padding:8px 16px; border-radius:99px; font-size:12px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
+.addressList { display:flex; flex-direction:column; gap:12px; }
+.addressCard { background:#fff; border:1px solid #ece9e3; border-radius:14px; padding:18px 20px; display:flex; align-items:flex-start; gap:14px; }
+.addressIcon { font-size:24px; }
+.addressInfo { flex:1; }
+.addressLabel { font-size:14px; font-weight:700; color:#1a1a18; display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.defaultTag { background:#fff8f5; border:1px solid #f0e0d4; color:#D85A30; font-size:10px; font-weight:600; padding:2px 8px; border-radius:99px; }
+.addressText { font-size:13px; color:#666; line-height:1.5; }
+.editAddrBtn { background:none; border:1px solid #ddd; padding:6px 14px; border-radius:99px; font-size:12px; cursor:pointer; font-family:'DM Sans',sans-serif; color:#555; flex-shrink:0; }
+.addAddrBtn { width:100%; background:none; border:2px dashed #ddd; border-radius:14px; padding:16px; font-size:14px; color:#888; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s; }
+.addAddrBtn:hover { border-color:#D85A30; color:#D85A30; background:#fff8f5; }
+.donationSummary { display:flex; justify-content:center; align-items:center; gap:24px; background:linear-gradient(135deg,#fff8f5,#ffeee4); border-radius:14px; padding:20px; margin-bottom:20px; border:1px solid #f0e0d4; }
+.dStat { display:flex; flex-direction:column; align-items:center; }
+.dStat span { font-size:22px; font-weight:800; color:#D85A30; }
+.dStat small { font-size:11px; color:#888; margin-top:2px; }
+.dDivider { width:1px; height:40px; background:#f0e0d4; }
+.donationList { display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
+.donationCard { background:#fff; border:1px solid #ece9e3; border-radius:12px; padding:16px; display:flex; align-items:center; gap:14px; }
+.donationIcon { font-size:24px; }
+.donationInfo { flex:1; }
+.donationOrphanage { font-size:14px; font-weight:600; color:#1a1a18; }
+.donationDate { font-size:12px; color:#888; margin-top:2px; }
+.donationAmount { font-size:15px; font-weight:700; color:#D85A30; }
+.donateMoreBtn { width:100%; background:#D85A30; color:#fff; border:none; padding:14px; border-radius:12px; font-size:15px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
+.settingsList { background:#fff; border:1px solid #ece9e3; border-radius:16px; overflow:hidden; }
+.settingRow { display:flex; align-items:center; gap:14px; padding:18px 20px; cursor:pointer; border-bottom:1px solid #f5f3f0; transition:background 0.15s; }
+.settingRow:last-child { border-bottom:none; }
+.settingRow:hover { background:#faf9f6; }
+.dangerRow:hover { background:#fff5f5; }
+.dangerRow .settingLabel { color:#e53e3e; }
+.settingIcon { font-size:22px; width:32px; text-align:center; }
+.settingInfo { flex:1; }
+.settingLabel { font-size:14px; font-weight:600; color:#1a1a18; }
+.settingDesc { font-size:12px; color:#888; margin-top:2px; }
+.toggle { width:42px; height:24px; border-radius:99px; background:#e0ddd8; position:relative; transition:background 0.3s; flex-shrink:0; }
+.toggleOn { background:#D85A30; }
+.toggleThumb { position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%; background:#fff; transition:transform 0.3s; box-shadow:0 1px 4px rgba(0,0,0,0.2); }
+.toggleOn .toggleThumb { transform:translateX(18px); }
+.settingArrow { font-size:20px; color:#ccc; }

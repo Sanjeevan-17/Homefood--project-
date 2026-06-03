@@ -1,0 +1,671 @@
+/* ── BASE ── */
+.page {
+  min-height: 100vh;
+  background: #fff8f0;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+}
+
+/* ── NAV ── */
+.nav {
+  background: #fff;
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f0ede8;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a18;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.logo em {
+  color: #D85A30;
+  font-style: italic;
+}
+.cookBadge {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  background: #fff3ee;
+  color: #D85A30;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-weight: 600;
+  font-style: normal;
+}
+.navTabs {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.tabBtn {
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #888;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.tabBtn:hover {
+  background: #fff3ee;
+  color: #D85A30;
+}
+.tabActive {
+  background: #D85A30 !important;
+  color: #fff !important;
+}
+.exitBtn {
+  background: none;
+  border: 1.5px solid #e0ddd8;
+  padding: 8px 16px;
+  border-radius: 99px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #555;
+  font-weight: 500;
+  flex-shrink: 0;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.exitBtn:hover {
+  border-color: #D85A30;
+  color: #D85A30;
+}
+
+/* ── CONTENT ── */
+.content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+/* ── DASHBOARD ── */
+.dashWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.welcomeBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.welcomeTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  color: #1a1a18;
+  margin-bottom: 4px;
+}
+.welcomeSub {
+  font-size: 14px;
+  color: #888;
+}
+.postBtn {
+  background: #D85A30;
+  color: #fff;
+  border: none;
+  padding: 11px 22px;
+  border-radius: 99px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: inherit;
+}
+.postBtn:hover {
+  background: #c04e27;
+}
+
+/* ── STATS ── */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.statCard {
+  border-radius: 16px;
+  padding: 24px 20px;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+.statIcon {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+.statValue {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  font-family: 'Playfair Display', serif;
+}
+.statLabel {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+/* ── SECTION ── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.sectionTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: #1a1a18;
+  font-weight: 700;
+}
+.seeAllBtn {
+  background: none;
+  border: none;
+  color: #D85A30;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* ── ORDER CARD ── */
+.orderCard {
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  gap: 12px;
+}
+.orderId {
+  font-size: 12px;
+  color: #aaa;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+.orderItem {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a18;
+  margin-bottom: 4px;
+}
+.orderCustomer {
+  font-size: 12px;
+  color: #888;
+}
+.orderRight {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+.orderTotal {
+  font-size: 18px;
+  font-weight: 700;
+  color: #D85A30;
+}
+.statusBadge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 99px;
+}
+.status_new {
+  background: #fff3cd;
+  color: #856404;
+}
+.status_preparing {
+  background: #fff0ee;
+  color: #D85A30;
+}
+.status_delivered {
+  background: #d4edda;
+  color: #155724;
+}
+
+/* ── TIPS ── */
+.tipsCard {
+  background: linear-gradient(135deg, #fff8f0, #fff3ee);
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid #f5ddd0;
+}
+.tipsTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a18;
+  margin-bottom: 14px;
+}
+.tipsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tip {
+  font-size: 14px;
+  color: #555;
+  padding: 10px 14px;
+  background: #fff;
+  border-radius: 10px;
+  border-left: 3px solid #D85A30;
+}
+
+/* ── POST FOOD FORM ── */
+.formWrap {
+  max-width: 620px;
+  margin: 0 auto;
+}
+.formCard {
+  background: #fff;
+  border-radius: 20px;
+  padding: 36px;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+}
+.formHeader {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.formHeader h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  color: #D85A30;
+  margin-bottom: 6px;
+}
+.formHeader p {
+  font-size: 14px;
+  color: #888;
+}
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.formGroupFull {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.formGroup label,
+.formGroupFull label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #444;
+}
+.formGroup input,
+.formGroup select,
+.formGroupFull input,
+.formGroupFull select,
+.formGroupFull textarea {
+  padding: 11px 14px;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+  resize: vertical;
+}
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroupFull input:focus,
+.formGroupFull select:focus,
+.formGroupFull textarea:focus {
+  border-color: #D85A30;
+}
+
+/* ── VEG TOGGLE ── */
+.vegToggle {
+  display: flex;
+  gap: 12px;
+}
+.vegBtn {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #fff;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.vegActive {
+  border-color: #639922;
+  background: #f0fff0;
+  color: #639922;
+}
+.nonvegActive {
+  border-color: #A32D2D;
+  background: #fff0f0;
+  color: #A32D2D;
+}
+
+/* ── UPLOAD BOX ── */
+.uploadBox {
+  border: 2px dashed #ddd;
+  border-radius: 12px;
+  padding: 28px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.uploadBox:hover {
+  border-color: #D85A30;
+  background: #fff8f0;
+}
+.uploadIcon {
+  font-size: 36px;
+  margin-bottom: 8px;
+}
+.uploadBox p {
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.uploadBox span {
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* ── FORM BUTTONS ── */
+.submitBtn {
+  width: 100%;
+  padding: 14px;
+  background: #D85A30;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: background 0.2s;
+  font-family: inherit;
+}
+.submitBtn:hover {
+  background: #c04e27;
+}
+.cancelBtn {
+  width: 100%;
+  padding: 13px;
+  background: #fff;
+  color: #888;
+  border: 2px solid #eee;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* ── MY FOODS ── */
+.myFoodsWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.foodsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.foodCard {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transition: transform 0.2s;
+}
+.foodCard:hover {
+  transform: translateY(-4px);
+}
+.foodInactive {
+  opacity: 0.6;
+}
+.foodCardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.foodEmoji {
+  font-size: 36px;
+}
+.activePill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 99px;
+}
+.pillActive {
+  background: #d4edda;
+  color: #155724;
+}
+.pillInactive {
+  background: #f8d7da;
+  color: #721c24;
+}
+.foodName {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a18;
+  margin-bottom: 8px;
+}
+.foodMeta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.foodCategory {
+  font-size: 12px;
+  color: #888;
+  background: #f5f3f0;
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+.foodPrice {
+  font-size: 15px;
+  font-weight: 700;
+  color: #D85A30;
+}
+.foodOrders {
+  font-size: 12px;
+  color: #aaa;
+  margin-bottom: 14px;
+}
+.foodActions {
+  display: flex;
+  gap: 8px;
+}
+.actionBtn {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.pauseBtn {
+  background: #fff3cd;
+  color: #856404;
+}
+.pauseBtn:hover {
+  background: #ffeeba;
+}
+.resumeBtn {
+  background: #d4edda;
+  color: #155724;
+}
+.resumeBtn:hover {
+  background: #c3e6cb;
+}
+.deleteBtn {
+  background: #f8d7da;
+  color: #721c24;
+}
+.deleteBtn:hover {
+  background: #f5c6cb;
+}
+
+/* ── ORDERS LIST ── */
+.ordersWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.ordersList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.orderDetailCard {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.orderDetailTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+.orderLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.orderBtns {
+  display: flex;
+  gap: 10px;
+}
+.acceptBtn {
+  background: #D85A30;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+.acceptBtn:hover {
+  background: #c04e27;
+}
+.deliverBtn {
+  background: #1D9E75;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+.deliverBtn:hover {
+  background: #178a64;
+}
+.deliveredNote {
+  font-size: 13px;
+  color: #155724;
+  font-weight: 600;
+  background: #d4edda;
+  padding: 8px 14px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+/* ── EMPTY STATE ── */
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.emptyState h3 {
+  font-size: 20px;
+  color: #1a1a18;
+  font-family: 'Playfair Display', serif;
+}
+.emptyState p {
+  font-size: 14px;
+  color: #888;
+}
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #1a1a18;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 99px;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 999;
+  white-space: nowrap;
+}
+.toastShow {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .statsGrid { grid-template-columns: repeat(2, 1fr); }
+  .foodsGrid { grid-template-columns: repeat(2, 1fr); }
+  .formGrid { grid-template-columns: 1fr; }
+  .formGroupFull { grid-column: span 1; }
+  .navTabs { display: none; }
+}
+@media (max-width: 480px) {
+  .statsGrid { grid-template-columns: repeat(2, 1fr); }
+  .foodsGrid { grid-template-columns: 1fr; }
+}
