@@ -8,12 +8,14 @@ import CookDashboard from './pages/CookDashboard';
 import DonateMeal from './pages/DonateMeal';
 import MembershipPage from './pages/MembershipPage';
 import UserProfile from './pages/UserProfile';
+import Login from './pages/Login';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/cook-register" element={<CookRegister />} />
         <Route path="/customer" element={<CustomerPage />} />
         <Route path="/cart" element={<CartPage />} />

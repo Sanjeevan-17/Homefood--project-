@@ -10,6 +10,8 @@ function CookRegister() {
     address: '',
     idProof: '',
     speciality: '',
+    email: '',
+    password: '',
     agreed: false
   });
 
@@ -21,14 +23,35 @@ function CookRegister() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.agreed) {
       alert('Please agree to food safety guidelines!');
       return;
     }
-    // ✅ Navigate to Cook Dashboard after registration
-    navigate('/cook-dashboard');
+
+    try {
+      const response = await fetch('https://legendary-xylophone-5g74jjx6pr4376qx-5000.app.github.dev/api/auth/register-cook', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+      console.log('Response:', data);
+
+      if (data.success) {
+        localStorage.setItem('userId', data.userId);
+        navigate('/cook-dashboard');
+      } else {
+        alert('Error: ' + (data.message || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong: ' + error.message);
+    }
   };
 
   return (
@@ -101,6 +124,30 @@ function CookRegister() {
               name="speciality"
               placeholder="eg: South Indian, North Indian, Biryani"
               value={formData.speciality}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Create a password"
+              value={formData.password}
               onChange={handleChange}
               required
             />

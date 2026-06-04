@@ -2,23 +2,20 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './CartPage.module.css';
 
-// Cart page receives cart items as props from CustomerPage
-// For now we use sample data to show the UI
-const sampleCartItems = [
-  { id: 1, name: 'Chicken Biryani', cook: 'Meena Amma', area: 'Jayanagar', price: 120, qty: 2, veg: false },
-  { id: 2, name: 'Dosa & Chutney', cook: 'Radha Akka', area: 'Koramangala', price: 60, qty: 1, veg: true },
-  { id: 4, name: 'Meals Thali', cook: 'Lakshmi Akka', area: 'BTM Layout', price: 100, qty: 1, veg: true },
-];
+const BACKEND = 'https://legendary-xylophone-5g74jjx6pr4376qx-5000.app.github.dev';
 
 function getInitials(name) {
-  return name.split(' ').map(w => w[0]).join('').slice(0, 2);
+  if (!name) return '??';
+  return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
 }
 
 export default function CartPage() {
   const navigate = useNavigate();
-  const [items, setItems] = useState(sampleCartItems);
+
+  const savedCart = JSON.parse(localStorage.getItem('cartItems') || '[]');
+  const [items, setItems] = useState(savedCart);
   const [donate, setDonate] = useState(false);
-  const [step, setStep] = useState('cart'); // 'cart' | 'address' | 'success'
+  const [step, setStep] = useState('cart');
   const [address, setAddress] = useState({
     name: '', phone: '', flat: '', area: '', landmark: '', pincode: '',
   });
@@ -49,7 +46,7 @@ export default function CartPage() {
   const donateFee = donate ? 80 : 0;
   const total = subtotal + deliveryFee + donateFee;
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     const { name, phone, flat, area, pincode } = address;
     if (!name || !phone || !flat || !area || !pincode) {
       showToast('Please fill all required fields!');
@@ -59,10 +56,34 @@ export default function CartPage() {
       showToast('Enter a valid 10-digit phone number!');
       return;
     }
-    setStep('success');
+
+    try {
+      const userId = localStorage.getItem('userId');
+      const response = await fetch(`${BACKEND}/api/auth/place-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId,
+          items,
+          address: `${flat}, ${area}, ${pincode}`,
+          total,
+          donate
+        })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        localStorage.removeItem('cartItems');
+        setStep('success');
+      } else {
+        showToast('Order failed. Please try again.');
+      }
+    } catch (error) {
+      console.error(error);
+      showToast('Something went wrong!');
+    }
   };
 
-  // ── SUCCESS SCREEN ──
   if (step === 'success') {
     return (
       <div className={styles.successPage}>
@@ -71,10 +92,6 @@ export default function CartPage() {
           <h2 className={styles.successTitle}>Order Placed!</h2>
           <p className={styles.successSub}>Your home food is being prepared with love 🍛</p>
           <div className={styles.successInfo}>
-            <div className={styles.successRow}>
-              <span>Order ID</span>
-              <strong>#HML{Math.floor(Math.random() * 90000) + 10000}</strong>
-            </div>
             <div className={styles.successRow}>
               <span>Total Paid</span>
               <strong>₹{total}</strong>
@@ -99,18 +116,13 @@ export default function CartPage() {
             <div className={styles.trackLine} />
             <div className={styles.trackStep}>📦 Delivered</div>
           </div>
-          <button className={styles.backHomeBtn} onClick={() => navigate('/')}>
-            Back to Home
-          </button>
-          <button className={styles.browseMoreBtn} onClick={() => navigate('/customer')}>
-            Order More Food
-          </button>
+          <button className={styles.backHomeBtn} onClick={() => navigate('/')}>Back to Home</button>
+          <button className={styles.browseMoreBtn} onClick={() => navigate('/customer')}>Order More Food</button>
         </div>
       </div>
     );
   }
 
-  // ── ADDRESS SCREEN ──
   if (step === 'address') {
     return (
       <div className={styles.page}>
@@ -119,73 +131,42 @@ export default function CartPage() {
           <div className={styles.logo}>Home<em>ly</em></div>
           <div />
         </nav>
-
         <div className={styles.addressWrap}>
           <div className={styles.addressCard}>
             <h2 className={styles.sectionTitle}>📍 Delivery Address</h2>
             <p className={styles.sectionSub}>We deliver only within Bangalore</p>
-
             <div className={styles.formGrid}>
               <div className={styles.formGroup}>
                 <label>Full Name *</label>
-                <input
-                  placeholder="Your full name"
-                  value={address.name}
-                  onChange={e => setAddress({ ...address, name: e.target.value })}
-                />
+                <input placeholder="Your full name" value={address.name} onChange={e => setAddress({ ...address, name: e.target.value })} />
               </div>
               <div className={styles.formGroup}>
                 <label>Phone Number *</label>
-                <input
-                  placeholder="10-digit mobile number"
-                  maxLength={10}
-                  value={address.phone}
-                  onChange={e => setAddress({ ...address, phone: e.target.value.replace(/\D/, '') })}
-                />
+                <input placeholder="10-digit mobile number" maxLength={10} value={address.phone} onChange={e => setAddress({ ...address, phone: e.target.value.replace(/\D/, '') })} />
               </div>
               <div className={styles.formGroupFull}>
                 <label>Flat / House No / Building *</label>
-                <input
-                  placeholder="e.g. Flat 204, Green Apartments"
-                  value={address.flat}
-                  onChange={e => setAddress({ ...address, flat: e.target.value })}
-                />
+                <input placeholder="e.g. Flat 204, Green Apartments" value={address.flat} onChange={e => setAddress({ ...address, flat: e.target.value })} />
               </div>
               <div className={styles.formGroupFull}>
                 <label>Area / Street *</label>
-                <input
-                  placeholder="e.g. Koramangala 5th Block"
-                  value={address.area}
-                  onChange={e => setAddress({ ...address, area: e.target.value })}
-                />
+                <input placeholder="e.g. Koramangala 5th Block" value={address.area} onChange={e => setAddress({ ...address, area: e.target.value })} />
               </div>
               <div className={styles.formGroup}>
                 <label>Landmark</label>
-                <input
-                  placeholder="e.g. Near Metro Station"
-                  value={address.landmark}
-                  onChange={e => setAddress({ ...address, landmark: e.target.value })}
-                />
+                <input placeholder="e.g. Near Metro Station" value={address.landmark} onChange={e => setAddress({ ...address, landmark: e.target.value })} />
               </div>
               <div className={styles.formGroup}>
                 <label>Pincode *</label>
-                <input
-                  placeholder="560001"
-                  maxLength={6}
-                  value={address.pincode}
-                  onChange={e => setAddress({ ...address, pincode: e.target.value.replace(/\D/, '') })}
-                />
+                <input placeholder="560001" maxLength={6} value={address.pincode} onChange={e => setAddress({ ...address, pincode: e.target.value.replace(/\D/, '') })} />
               </div>
             </div>
-
-            {/* Order Summary Mini */}
             <div className={styles.miniSummary}>
               <div className={styles.miniRow}><span>Subtotal</span><span>₹{subtotal}</span></div>
               <div className={styles.miniRow}><span>Delivery</span><span>{deliveryFee === 0 ? 'FREE 🎉' : `₹${deliveryFee}`}</span></div>
               {donate && <div className={styles.miniRow}><span>Donate Meal 🤲</span><span>₹80</span></div>}
               <div className={styles.miniTotal}><span>Total</span><span>₹{total}</span></div>
             </div>
-
             <button className={styles.placeOrderBtn} onClick={handlePlaceOrder}>
               Place Order · ₹{total} 🛵
             </button>
@@ -197,7 +178,6 @@ export default function CartPage() {
     );
   }
 
-  // ── CART SCREEN ──
   return (
     <div className={styles.page}>
       <nav className={styles.nav}>
@@ -211,17 +191,12 @@ export default function CartPage() {
           <div className={styles.emptyIcon}>🛒</div>
           <h2>Your cart is empty!</h2>
           <p>Go back and add some delicious home food</p>
-          <button className={styles.browseBtn} onClick={() => navigate('/customer')}>
-            Browse Food
-          </button>
+          <button className={styles.browseBtn} onClick={() => navigate('/customer')}>Browse Food</button>
         </div>
       ) : (
         <div className={styles.cartLayout}>
-
-          {/* LEFT — Cart Items */}
           <div className={styles.cartLeft}>
             <h2 className={styles.sectionTitle}>🛒 Your Cart</h2>
-
             {items.map(item => (
               <div key={item.id} className={styles.cartItem}>
                 <div className={styles.itemLeft}>
@@ -245,8 +220,6 @@ export default function CartPage() {
                 </div>
               </div>
             ))}
-
-            {/* Donate Strip */}
             <div
               className={`${styles.donateStrip} ${donate ? styles.donateActive : ''}`}
               onClick={() => { setDonate(!donate); showToast(donate ? 'Donation removed' : '🤲 Meal donation added!'); }}
@@ -256,65 +229,38 @@ export default function CartPage() {
                 <h3>Donate a meal to an orphanage</h3>
                 <p>Add ₹80 to feed a child today</p>
               </div>
-              <div className={styles.donateToggle}>
-                {donate ? '✅ Added' : '+ Add ₹80'}
-              </div>
+              <div className={styles.donateToggle}>{donate ? '✅ Added' : '+ Add ₹80'}</div>
             </div>
           </div>
 
-          {/* RIGHT — Bill Summary */}
           <div className={styles.cartRight}>
             <div className={styles.billCard}>
               <h2 className={styles.billTitle}>🧾 Bill Summary</h2>
-
               {items.map(item => (
                 <div key={item.id} className={styles.billRow}>
                   <span>{item.name} × {item.qty}</span>
                   <span>₹{item.price * item.qty}</span>
                 </div>
               ))}
-
               <div className={styles.billDivider} />
-
-              <div className={styles.billRow}>
-                <span>Subtotal</span>
-                <span>₹{subtotal}</span>
-              </div>
+              <div className={styles.billRow}><span>Subtotal</span><span>₹{subtotal}</span></div>
               <div className={styles.billRow}>
                 <span>Delivery Fee</span>
                 <span style={{ color: deliveryFee === 0 ? '#1D9E75' : '#333' }}>
                   {deliveryFee === 0 ? 'FREE 🎉' : `₹${deliveryFee}`}
                 </span>
               </div>
-              {deliveryFee === 0 && (
-                <div className={styles.freeDeliveryNote}>✓ Free delivery on orders above ₹300!</div>
-              )}
-              {donate && (
-                <div className={styles.billRow}>
-                  <span>Donate Meal 🤲</span>
-                  <span>₹80</span>
-                </div>
-              )}
-
+              {donate && <div className={styles.billRow}><span>Donate Meal 🤲</span><span>₹80</span></div>}
               <div className={styles.billDivider} />
-              <div className={styles.billTotal}>
-                <span>Total</span>
-                <span>₹{total}</span>
-              </div>
-
+              <div className={styles.billTotal}><span>Total</span><span>₹{total}</span></div>
               <button className={styles.checkoutBtn} onClick={() => setStep('address')}>
                 Proceed to Checkout →
               </button>
-
-              <div className={styles.safeNote}>
-                🔒 Safe & secure · Bangalore only
-              </div>
+              <div className={styles.safeNote}>🔒 Safe & secure · Bangalore only</div>
             </div>
           </div>
-
         </div>
       )}
-
       <div className={`${styles.toast} ${toastVisible ? styles.toastShow : ''}`}>{toast}</div>
     </div>
   );

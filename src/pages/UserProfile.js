@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './UserProfile.module.css';
 
@@ -20,7 +20,8 @@ export default function UserProfile() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('Orders');
   const [editMode, setEditMode] = useState(false);
-  const [profile, setProfile] = useState({ name: 'Manoj Kumar', phone: '9876543210', email: 'manoj@gmail.com' });
+  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState({ name: '', phone: '', email: '' });
   const [draft, setDraft] = useState({ ...profile });
 
   const donations = [
@@ -33,6 +34,39 @@ export default function UserProfile() {
   const totalMeals = donations.reduce((a, b) => a + b.meals, 0);
   const totalSpent = pastOrders.reduce((a, b) => a + b.total, 0);
 
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      navigate('/');
+      return;
+    }
+
+    fetch(`https://legendary-xylophone-5g74jjx6pr4376qx-5000.app.github.dev/api/auth/user/${userId}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setProfile({
+            name: data.user.name,
+            phone: data.user.phone,
+            email: data.user.email
+          });
+          setDraft({
+            name: data.user.name,
+            phone: data.user.phone,
+            email: data.user.email
+          });
+        }
+      })
+      .catch(err => console.error(err))
+      .finally(() => setLoading(false));
+  }, [navigate]);
+
+  const getInitials = (name) => {
+    return name ? name.split(' ').map(n => n[0]).join('').toUpperCase() : '?';
+  };
+
+  if (loading) return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>;
+
   return (
     <div className={styles.app}>
       <nav className={styles.nav}>
@@ -42,13 +76,13 @@ export default function UserProfile() {
       </nav>
 
       <div className={styles.profileHeader}>
-        <div className={styles.avatarBig}>MK</div>
+        <div className={styles.avatarBig}>{getInitials(profile.name)}</div>
         <div className={styles.profileInfo}>
           {editMode ? (
             <div className={styles.editFields}>
-              <input className={styles.editField} value={draft.name} onChange={e => setDraft({...draft,name:e.target.value})} />
-              <input className={styles.editField} value={draft.phone} onChange={e => setDraft({...draft,phone:e.target.value})} />
-              <input className={styles.editField} value={draft.email} onChange={e => setDraft({...draft,email:e.target.value})} />
+              <input className={styles.editField} value={draft.name} onChange={e => setDraft({...draft, name: e.target.value})} />
+              <input className={styles.editField} value={draft.phone} onChange={e => setDraft({...draft, phone: e.target.value})} />
+              <input className={styles.editField} value={draft.email} onChange={e => setDraft({...draft, email: e.target.value})} />
               <div className={styles.editBtns}>
                 <button className={styles.cancelEdit} onClick={() => { setDraft({...profile}); setEditMode(false); }}>Cancel</button>
                 <button className={styles.saveEdit} onClick={() => { setProfile({...draft}); setEditMode(false); }}>Save Changes</button>
@@ -155,7 +189,13 @@ export default function UserProfile() {
               <div
                 key={i}
                 className={`${styles.settingRow} ${s.danger ? styles.dangerRow : ''}`}
-                onClick={() => { if(s.label==='Membership') navigate('/membership'); if(s.label==='Logout') navigate('/'); }}
+                onClick={() => {
+                  if (s.label === 'Membership') navigate('/membership');
+                  if (s.label === 'Logout') {
+                    localStorage.removeItem('userId');
+                    navigate('/');
+                  }
+                }}
               >
                 <div className={styles.settingIcon}>{s.icon}</div>
                 <div className={styles.settingInfo}>

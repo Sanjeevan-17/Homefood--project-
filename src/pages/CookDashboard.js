@@ -1,33 +1,43 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './CookDashboard.module.css';
 
-const initialFoods = [
-  { id: 1, name: 'Chicken Biryani', price: 120, category: 'Lunch', orders: 24, active: true },
-  { id: 2, name: 'Dosa & Chutney', price: 60, category: 'Breakfast', orders: 18, active: true },
-  { id: 3, name: 'Roti Sabzi Set', price: 80, category: 'Dinner', orders: 12, active: false },
-];
-
-const initialOrders = [
-  { id: '#HML10234', item: 'Chicken Biryani', qty: 2, total: 240, customer: 'Ravi K.', area: 'Koramangala', status: 'new' },
-  { id: '#HML10235', item: 'Dosa & Chutney', qty: 3, total: 180, customer: 'Priya S.', area: 'Indiranagar', status: 'preparing' },
-  { id: '#HML10230', item: 'Roti Sabzi Set', qty: 1, total: 80, customer: 'Arjun M.', area: 'BTM Layout', status: 'delivered' },
-];
-
+const BACKEND = 'https://legendary-xylophone-5g74jjx6pr4376qx-5000.app.github.dev';
 const categories = ['Breakfast', 'Lunch', 'Dinner', 'Tiffin', 'Snacks', 'Sweets'];
 const cuisines = ['South Indian', 'North Indian', 'Chinese', 'Continental', 'Desserts'];
 
 export default function CookDashboard() {
   const navigate = useNavigate();
+  const cookId = localStorage.getItem('userId');
+  const cookName = localStorage.getItem('name') || 'Cook';
+
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [foods, setFoods] = useState(initialFoods);
-  const [orders, setOrders] = useState(initialOrders);
+  const [foods, setFoods] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [toast, setToast] = useState('');
   const [toastVisible, setToastVisible] = useState(false);
-
   const [foodForm, setFoodForm] = useState({
     name: '', price: '', category: '', cuisine: '', description: '', veg: 'veg', serves: '1',
   });
+
+  useEffect(() => {
+    if (!cookId) { navigate('/login'); return; }
+    fetch(`${BACKEND}/api/auth/meals/${cookId}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setFoods(data.meals.map(m => ({
+            id: m.id,
+            name: m.meal_name,
+            price: m.price,
+            category: m.category,
+            orders: 0,
+            active: true
+          })));
+        }
+      })
+      .catch(err => console.error(err));
+  }, [cookId, navigate]);
 
   const showToast = (msg) => {
     setToast(msg);
@@ -39,24 +49,35 @@ export default function CookDashboard() {
     setFoodForm({ ...foodForm, [e.target.name]: e.target.value });
   };
 
-  const handlePostFood = (e) => {
+  const handlePostFood = async (e) => {
     e.preventDefault();
     if (!foodForm.name || !foodForm.price || !foodForm.category) {
       showToast('Please fill all required fields!');
       return;
     }
-    const newFood = {
-      id: foods.length + 1,
-      name: foodForm.name,
-      price: Number(foodForm.price),
-      category: foodForm.category,
-      orders: 0,
-      active: true,
-    };
-    setFoods(prev => [newFood, ...prev]);
-    setFoodForm({ name: '', price: '', category: '', cuisine: '', description: '', veg: 'veg', serves: '1' });
-    showToast('🎉 Food posted successfully!');
-    setActiveTab('myfoods');
+    try {
+      const response = await fetch(`${BACKEND}/api/auth/add-meal`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cookId, ...foodForm })
+      });
+      const data = await response.json();
+      if (data.success) {
+        setFoods(prev => [{
+          id: data.mealId,
+          name: foodForm.name,
+          price: Number(foodForm.price),
+          category: foodForm.category,
+          orders: 0,
+          active: true
+        }, ...prev]);
+        setFoodForm({ name: '', price: '', category: '', cuisine: '', description: '', veg: 'veg', serves: '1' });
+        showToast('🎉 Food posted successfully!');
+        setActiveTab('myfoods');
+      }
+    } catch (error) {
+      showToast('Something went wrong!');
+    }
   };
 
   const toggleActive = (id) => {
@@ -81,7 +102,6 @@ export default function CookDashboard() {
   return (
     <div className={styles.page}>
 
-      {/* ── NAV ── */}
       <nav className={styles.nav}>
         <div className={styles.logo}>Home<em>ly</em> <span className={styles.cookBadge}>👩‍🍳 Cook</span></div>
         <div className={styles.navTabs}>
@@ -105,12 +125,11 @@ export default function CookDashboard() {
 
       <div className={styles.content}>
 
-        {/* ── DASHBOARD TAB ── */}
         {activeTab === 'dashboard' && (
           <div className={styles.dashWrap}>
             <div className={styles.welcomeBar}>
               <div>
-                <h2 className={styles.welcomeTitle}>Welcome back, Meena Amma! 👋</h2>
+                <h2 className={styles.welcomeTitle}>Welcome back, {cookName}! 👋</h2>
                 <p className={styles.welcomeSub}>Here's how your kitchen is doing today</p>
               </div>
               <button className={styles.postBtn} onClick={() => setActiveTab('postfood')}>
@@ -118,7 +137,6 @@ export default function CookDashboard() {
               </button>
             </div>
 
-            {/* Stats */}
             <div className={styles.statsGrid}>
               <div className={styles.statCard} style={{ background: 'linear-gradient(135deg, #D85A30, #f0845a)' }}>
                 <div className={styles.statIcon}>💰</div>
@@ -142,13 +160,14 @@ export default function CookDashboard() {
               </div>
             </div>
 
-            {/* Recent Orders */}
             <div className={styles.section}>
               <div className={styles.sectionHeader}>
                 <h3 className={styles.sectionTitle}>Recent Orders</h3>
                 <button className={styles.seeAllBtn} onClick={() => setActiveTab('orders')}>See all →</button>
               </div>
-              {orders.slice(0, 3).map(order => (
+              {orders.length === 0 ? (
+                <p style={{ color: '#999', padding: '1rem' }}>No orders yet!</p>
+              ) : orders.slice(0, 3).map(order => (
                 <div key={order.id} className={styles.orderCard}>
                   <div className={styles.orderLeft}>
                     <div className={styles.orderId}>{order.id}</div>
@@ -165,7 +184,6 @@ export default function CookDashboard() {
               ))}
             </div>
 
-            {/* Quick Tips */}
             <div className={styles.tipsCard}>
               <h3 className={styles.tipsTitle}>💡 Tips to get more orders</h3>
               <div className={styles.tipsList}>
@@ -178,7 +196,6 @@ export default function CookDashboard() {
           </div>
         )}
 
-        {/* ── POST FOOD TAB ── */}
         {activeTab === 'postfood' && (
           <div className={styles.formWrap}>
             <div className={styles.formCard}>
@@ -186,33 +203,16 @@ export default function CookDashboard() {
                 <h2>➕ Post a Food Item</h2>
                 <p>Share your delicious home food with Bangalore!</p>
               </div>
-
               <form onSubmit={handlePostFood}>
                 <div className={styles.formGrid}>
-
                   <div className={styles.formGroupFull}>
                     <label>Food Name *</label>
-                    <input
-                      name="name"
-                      placeholder="e.g. Chicken Biryani, Idli Sambar"
-                      value={foodForm.name}
-                      onChange={handleFoodChange}
-                      required
-                    />
+                    <input name="name" placeholder="e.g. Chicken Biryani" value={foodForm.name} onChange={handleFoodChange} required />
                   </div>
-
                   <div className={styles.formGroup}>
                     <label>Price per Serving (₹) *</label>
-                    <input
-                      name="price"
-                      type="number"
-                      placeholder="e.g. 120"
-                      value={foodForm.price}
-                      onChange={handleFoodChange}
-                      required
-                    />
+                    <input name="price" type="number" placeholder="e.g. 120" value={foodForm.price} onChange={handleFoodChange} required />
                   </div>
-
                   <div className={styles.formGroup}>
                     <label>Serves (persons)</label>
                     <select name="serves" value={foodForm.serves} onChange={handleFoodChange}>
@@ -222,7 +222,6 @@ export default function CookDashboard() {
                       <option value="4">4+ persons</option>
                     </select>
                   </div>
-
                   <div className={styles.formGroup}>
                     <label>Category *</label>
                     <select name="category" value={foodForm.category} onChange={handleFoodChange} required>
@@ -230,7 +229,6 @@ export default function CookDashboard() {
                       {categories.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                   </div>
-
                   <div className={styles.formGroup}>
                     <label>Cuisine</label>
                     <select name="cuisine" value={foodForm.cuisine} onChange={handleFoodChange}>
@@ -238,70 +236,35 @@ export default function CookDashboard() {
                       {cuisines.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                   </div>
-
                   <div className={styles.formGroupFull}>
                     <label>Description</label>
-                    <textarea
-                      name="description"
-                      placeholder="Describe your dish — ingredients, taste, special about it..."
-                      value={foodForm.description}
-                      onChange={handleFoodChange}
-                      rows={3}
-                    />
+                    <textarea name="description" placeholder="Describe your dish..." value={foodForm.description} onChange={handleFoodChange} rows={3} />
                   </div>
-
-                  {/* Veg / NonVeg Toggle */}
                   <div className={styles.formGroupFull}>
                     <label>Food Type *</label>
                     <div className={styles.vegToggle}>
-                      <button
-                        type="button"
-                        className={`${styles.vegBtn} ${foodForm.veg === 'veg' ? styles.vegActive : ''}`}
-                        onClick={() => setFoodForm({ ...foodForm, veg: 'veg' })}
-                      >
+                      <button type="button" className={`${styles.vegBtn} ${foodForm.veg === 'veg' ? styles.vegActive : ''}`} onClick={() => setFoodForm({ ...foodForm, veg: 'veg' })}>
                         🟢 Vegetarian
                       </button>
-                      <button
-                        type="button"
-                        className={`${styles.vegBtn} ${foodForm.veg === 'nonveg' ? styles.nonvegActive : ''}`}
-                        onClick={() => setFoodForm({ ...foodForm, veg: 'nonveg' })}
-                      >
+                      <button type="button" className={`${styles.vegBtn} ${foodForm.veg === 'nonveg' ? styles.nonvegActive : ''}`} onClick={() => setFoodForm({ ...foodForm, veg: 'nonveg' })}>
                         🔴 Non-Vegetarian
                       </button>
                     </div>
                   </div>
-
-                  {/* Image Upload placeholder */}
-                  <div className={styles.formGroupFull}>
-                    <label>Food Photo</label>
-                    <div className={styles.uploadBox}>
-                      <div className={styles.uploadIcon}>📷</div>
-                      <p>Click to upload food photo</p>
-                      <span>JPG, PNG up to 5MB · AWS S3 upload coming soon!</span>
-                    </div>
-                  </div>
-
                 </div>
-
-                <button type="submit" className={styles.submitBtn}>
-                  🚀 Post Food Item
-                </button>
-                <button type="button" className={styles.cancelBtn} onClick={() => setActiveTab('dashboard')}>
-                  Cancel
-                </button>
+                <button type="submit" className={styles.submitBtn}>🚀 Post Food Item</button>
+                <button type="button" className={styles.cancelBtn} onClick={() => setActiveTab('dashboard')}>Cancel</button>
               </form>
             </div>
           </div>
         )}
 
-        {/* ── MY FOODS TAB ── */}
         {activeTab === 'myfoods' && (
           <div className={styles.myFoodsWrap}>
             <div className={styles.sectionHeader}>
               <h2 className={styles.sectionTitle}>🍱 My Food Items</h2>
               <button className={styles.postBtn} onClick={() => setActiveTab('postfood')}>+ Post New</button>
             </div>
-
             {foods.length === 0 ? (
               <div className={styles.emptyState}>
                 <div style={{ fontSize: 56 }}>🍱</div>
@@ -326,13 +289,10 @@ export default function CookDashboard() {
                     </div>
                     <div className={styles.foodOrders}>📦 {food.orders} orders received</div>
                     <div className={styles.foodActions}>
-                      <button
-                        className={`${styles.actionBtn} ${food.active ? styles.pauseBtn : styles.resumeBtn}`}
-                        onClick={() => toggleActive(food.id)}
-                      >
+                      <button className={`${styles.actionBtn} ${food.active ? styles.pauseBtn : styles.resumeBtn}`} onClick={() => toggleActive(food.id)}>
                         {food.active ? 'Pause' : 'Resume'}
                       </button>
-                      <button className={styles.actionBtn + ' ' + styles.deleteBtn} onClick={() => deleteFood(food.id)}>
+                      <button className={`${styles.actionBtn} ${styles.deleteBtn}`} onClick={() => deleteFood(food.id)}>
                         Delete
                       </button>
                     </div>
@@ -343,11 +303,9 @@ export default function CookDashboard() {
           </div>
         )}
 
-        {/* ── ORDERS TAB ── */}
         {activeTab === 'orders' && (
           <div className={styles.ordersWrap}>
             <h2 className={styles.sectionTitle}>🔔 Incoming Orders</h2>
-
             {orders.length === 0 ? (
               <div className={styles.emptyState}>
                 <div style={{ fontSize: 56 }}>📭</div>
@@ -371,20 +329,14 @@ export default function CookDashboard() {
                         </div>
                       </div>
                     </div>
-
-                    {/* Status Action Buttons */}
                     {order.status === 'new' && (
                       <div className={styles.orderBtns}>
-                        <button className={styles.acceptBtn} onClick={() => updateOrderStatus(order.id, 'preparing')}>
-                          ✅ Accept & Start Cooking
-                        </button>
+                        <button className={styles.acceptBtn} onClick={() => updateOrderStatus(order.id, 'preparing')}>✅ Accept & Start Cooking</button>
                       </div>
                     )}
                     {order.status === 'preparing' && (
                       <div className={styles.orderBtns}>
-                        <button className={styles.deliverBtn} onClick={() => updateOrderStatus(order.id, 'delivered')}>
-                          🛵 Mark as Delivered
-                        </button>
+                        <button className={styles.deliverBtn} onClick={() => updateOrderStatus(order.id, 'delivered')}>🛵 Mark as Delivered</button>
                       </div>
                     )}
                     {order.status === 'delivered' && (
